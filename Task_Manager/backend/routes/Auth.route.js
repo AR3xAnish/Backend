@@ -1,0 +1,26 @@
+import express from "express";
+const Router = express.Router()
+import User from "../models/User.model.js";
+
+Router.post("/register",async (req,res)=>{
+  try {
+    const {name,email,password} = req.body
+    const existing = await User.find({email})
+    if(existing){
+      return res.status(500).json({"message":"Exists"})
+    }
+    if(!name || !email || !password){
+      return res.status(400).json({"message":"Cant do"})
+    }
+    const user = await User.create({name,email,password})
+    return res.status(200).json({
+      _id:user._id,
+      name:user.name,
+      email:user.email
+    })
+  } catch (error) {
+    return res.status(400).json({"message":error.message})
+  }
+})
+
+export {Router as AuthRouter}
