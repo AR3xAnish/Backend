@@ -16,7 +16,8 @@ Router.post("/register",async (req,res)=>{
     return res.status(200).json({
       _id:user._id,
       name:user.name,
-      email:user.email
+      email:user.email,
+      token:generateToken(user._id)
     })
   } catch (error) {
     return res.status(400).json({"message":error.message})
