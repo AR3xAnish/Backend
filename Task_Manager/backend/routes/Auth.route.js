@@ -1,6 +1,11 @@
 import express from "express";
 const Router = express.Router()
 import User from "../models/User.model.js";
+import jwt from "jsonwebtoken"
+
+const generateToken=(id)=>{
+  return jwt.sign({id},process.env.TOKEN_STRING,{expiresIn:"7d"})
+}
 
 Router.post("/register",async (req,res)=>{
   try {
@@ -38,10 +43,11 @@ Router.post("/login",async (req,res)=>{
     return res.status(200).json({
       _id:user._id,
       name:user.name,
-      email:user.email
+      email:user.email,
+      token:generateToken(user._id)
     })
   } catch (error) {
-    return res.status(404).json({"message":error.message})
+    return res.status(400).json({"message":error.message})
   }
 })
 
