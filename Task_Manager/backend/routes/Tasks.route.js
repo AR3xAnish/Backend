@@ -15,13 +15,16 @@ Router.get("/",async (req,res)=>{
 
 Router.post("/:id",async(req,res)=>{
   try {
-    const {Title,description} = req.body;
+    const {Title,description,priority,status,deadline} = req.body;
     if(!Title) return res.status(500).json({"message":"no title given"})
     const id = req.params.id
     const task = await Task.create({
       Title,
       description,
-      user:id
+      user:id,
+      status,
+      priority,
+      deadline
     })
     return res.status(200).json({"Message":"Task created successfully"})
   } catch (error) {
